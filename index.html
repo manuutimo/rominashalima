@@ -9,7 +9,104 @@
       background: #f5f5f5;
       text-align: center;
       padding: 40px;
+    }<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Toon Me - Simple Cartoon Filter</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f0f0f0;
+      text-align: center;
+      padding: 30px;
     }
+
+    #container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      transition: 0.3s ease;
+    }
+
+    .toon {
+      filter: contrast(150%) saturate(120%) brightness(110%) sepia(30%) drop-shadow(0 0 4px #444);
+    }
+
+    input[type="file"] {
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      background: #007bff;
+      color: #fff;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="container">
+    <h2>Toon Me - Cartoonify Your Photo</h2>
+    <input type="file" id="upload" accept="image/*">
+    <br>
+    <img id="image" src="" alt="Your image will appear here">
+    <br>
+    <button onclick="downloadToon()">Download Toon Image</button>
+  </div>
+
+  <script>
+    const upload = document.getElementById('upload');
+    const image = document.getElementById('image');
+
+    upload.addEventListener('change', () => {
+      const file = upload.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          image.src = e.target.result;
+          image.classList.add('toon');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function downloadToon() {
+      const canvas = document.createElement('canvas');
+      canvas.width = image.naturalWidth;
+      canvas.height = image.naturalHeight;
+      const ctx = canvas.getContext('2d');
+
+      ctx.filter = "contrast(150%) saturate(120%) brightness(110%) sepia(30%)";
+      ctx.drawImage(image, 0, 0);
+
+      const link = document.createElement('a');
+      link.download = 'toon-me.png';
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+  </script>
+
+</body>
+</html>
+
 
     h2 {
       margin-bottom: 20px;
